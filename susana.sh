@@ -16,19 +16,19 @@ REPO="edx-app-android"
 CONFIG="config"
 
 case $1 in
-    help)
-        help
-        ;;
-    config)
+	help)
+		help
+		;;
+	config)
 		cat $CONFIG/setup.properties >> $REPO/OpenEdXMobile/gradle.properties
-        ;;
-    build)
+		;;
+	build)
 		cd $REPO/ && ./gradlew assembleProdRelease
-        ;;
+		;;
 	module)
 		git submodule init && git submodule update
 		;;
-    *)
-        help
-        ;;
+	*)
+		help
+		;;
 esac
