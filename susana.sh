@@ -1,35 +1,34 @@
 #!/bin/bash
 
-read -r -d '' USAGE << EOF
-Usage: susana [command]
+help(){
+    cat<<__EOF__
+    usage: susana [option]
 
-Commands:
--config		setup config for open edx app
--build		build APK
--update		update details
--branch BRANCH	use provided branch
--h		show this message\n
-EOF
+    Options:
+	susana config		setup config for open edx app
+	susana build		build APK
+	susana update		update git sub module
+	susana help		show this message
+__EOF__
+}
 
-COMMANDS='update:config:build:branch:h'
-BRANCH='master'
+REPO="edx-app-android"
+CONFIG="config"
 
-while getopts $COMMANDS option
-do
-case $option in
-	update)
+case $1 in
+    help)
+        help
+        ;;
+    config)
+		cat $CONFIG/setup.properties >> $REPO/OpenEdXMobile/gradle.properties
+        ;;
+    build)
+		cd $REPO/ && ./gradlew assembleProdRelease
+        ;;
+	module)
+		git submodule init && git submodule update
 		;;
-	config)
-		;;
-	build)
-		;;
-	branch) BRANCH=$OPTARG 
-		;;
-	h) printf "$USAGE" && exit 2
-		;;
-*) printf "$USAGE" && exit 1
-		;;
+    *)
+        help
+        ;;
 esac
-done
-
-shift $((OPTIND - 1))
